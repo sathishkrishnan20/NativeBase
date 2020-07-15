@@ -88,8 +88,10 @@ Radio.propTypes = {
   standardStyle: PropTypes.bool
 };
 
-const StyledRadio = connectStyle('NativeBase.Radio', {}, mapPropsToStyleNames)(
-  Radio
-);
+const StyledRadio = connectStyle(
+  'NativeBase.Radio',
+  {},
+  mapPropsToStyleNames
+)(Radio);
 
 export { StyledRadio as Radio };
