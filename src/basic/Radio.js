@@ -55,7 +55,7 @@ class Radio extends Component {
                       : variables.radioColor
                     : this.props.color
                     ? this.props.color
-                    : undefined
+                    : variables.radioColor
                   : this.props.selected
                   ? this.props.selectedColor
                     ? this.props.selectedColor
@@ -88,8 +88,10 @@ Radio.propTypes = {
   standardStyle: PropTypes.bool
 };
 
-const StyledRadio = connectStyle('NativeBase.Radio', {}, mapPropsToStyleNames)(
-  Radio
-);
+const StyledRadio = connectStyle(
+  'NativeBase.Radio',
+  {},
+  mapPropsToStyleNames
+)(Radio);
 
 export { StyledRadio as Radio };

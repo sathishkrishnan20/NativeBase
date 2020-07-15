@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { TouchableOpacity } from 'react-native';
-import IconNB from 'react-native-vector-icons/Ionicons';
+import IconNB from 'react-native-vector-icons/MaterialIcons';
 import { connectStyle } from 'native-base-shoutem-theme';
 
 import mapPropsToStyleNames from '../utils/mapPropsToStyleNames';
@@ -59,8 +59,8 @@ class CheckBox extends Component {
           }}
           name={
             platform === PLATFORM.IOS && platformStyle !== PLATFORM.MATERIAL
-              ? 'ios-checkmark'
-              : 'md-checkmark'
+              ? 'check'
+              : 'check'
           }
         />
       </TouchableOpacity>
