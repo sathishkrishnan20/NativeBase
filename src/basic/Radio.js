@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { TouchableOpacity, Platform } from 'react-native';
 import { connectStyle } from 'native-base-shoutem-theme';
-import Icon from 'react-native-vector-icons/Ionicons';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import mapPropsToStyleNames from '../utils/mapPropsToStyleNames';
 import variable from '../theme/variables/platform';
@@ -69,11 +69,11 @@ class Radio extends Component {
             name={
               Platform.OS === 'ios'
                 ? this.props.selected
-                  ? 'ios-radio-button-on'
-                  : 'ios-radio-button-off'
+                  ? 'radio-button-checked'
+                  : 'radio-button-unchecked'
                 : this.props.selected
-                ? 'md-radio-button-on'
-                : 'md-radio-button-off'
+                ? 'radio-button-checked'
+                : 'radio-button-unchecked'
             }
           />
         )}
