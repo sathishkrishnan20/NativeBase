@@ -1,5 +1,5 @@
 // @flow
-
+/* eslint-disable no-unused-vars */
 import variable from './../variables/platform';
 import { PLATFORM } from './../variables/commonColor';
 
