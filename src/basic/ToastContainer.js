@@ -1,13 +1,12 @@
 /* eslint-disable class-methods-use-this */
 /* eslint-disable no-unused-vars */
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import {
   Keyboard,
   Platform,
   Animated,
   ViewPropTypes,
-  PanResponder
+  PanResponder,
 } from 'react-native';
 import { connectStyle } from 'native-base-shoutem-theme';
 
@@ -21,7 +20,7 @@ import { Toast } from './Toast';
 const POSITION = {
   ABSOLUTE: 'absolute',
   BOTTOM: 'bottom',
-  TOP: 'top'
+  TOP: 'top',
 };
 
 class ToastContainer extends Component {
@@ -41,7 +40,7 @@ class ToastContainer extends Component {
       pan: new Animated.ValueXY({ x: 0, y: 0 }),
       keyboardHeight: 0,
       isKeyboardVisible: false,
-      modalVisible: false
+      modalVisible: false,
     };
 
     this.keyboardDidHide = this.keyboardDidHide.bind(this);
@@ -52,16 +51,22 @@ class ToastContainer extends Component {
         if (dx !== 0) {
           Animated.timing(this.state.pan, {
             toValue: { x: dx, y: 0 },
-            duration: 100
+            duration: 100,
+            useNativeDriver: false
           }).start(() => this.closeToast('swipe'));
         }
-      }
+      },
     });
   }
 
   componentDidMount() {
     Keyboard.addListener('keyboardDidShow', this.keyboardDidShow);
     Keyboard.addListener('keyboardDidHide', this.keyboardDidHide);
+  }
+
+  componentWillUnmount() {
+    Keyboard.removeListener('keyboardDidShow', this.keyboardDidShow);
+    Keyboard.removeListener('keyboardDidHide', this.keyboardDidHide);
   }
 
   getToastStyle() {
@@ -73,7 +78,7 @@ class ToastContainer extends Component {
       paddingHorizontal: Platform.OS === PLATFORM.IOS ? 20 : 0,
       top: this.state.position === POSITION.TOP ? 30 : undefined,
       bottom:
-        this.state.position === POSITION.BOTTOM ? this.getTop() : undefined
+        this.state.position === POSITION.BOTTOM ? this.getTop() : undefined,
     };
   }
 
@@ -105,14 +110,14 @@ class ToastContainer extends Component {
   keyboardDidHide() {
     this.setState({
       keyboardHeight: 0,
-      isKeyboardVisible: false
+      isKeyboardVisible: false,
     });
   }
 
   keyboardDidShow(e) {
     this.setState({
       keyboardHeight: e.endCoordinates.height,
-      isKeyboardVisible: true
+      isKeyboardVisible: true,
     });
   }
 
@@ -128,7 +133,8 @@ class ToastContainer extends Component {
       buttonTextStyle: config.buttonTextStyle,
       buttonStyle: config.buttonStyle,
       textStyle: config.textStyle,
-      onClose: config.onClose
+      onClose: config.onClose,
+      swipeDisabled: config.swipeDisabled || false
     });
     // If we have a toast already open, cut off its close timeout so that it won't affect *this* toast.
     if (this.closeTimeout) {
@@ -146,26 +152,26 @@ class ToastContainer extends Component {
     Animated.timing(this.state.fadeAnim, {
       toValue: 1,
       duration: 200,
-      useNativeDriver: false
+      useNativeDriver: false,
     }).start();
   }
-  closeModal(reason) {
+  closeModal = (reason) => {
     this.setState({
-      modalVisible: false
+      modalVisible: false,
     });
     const { onClose } = this.state;
     if (onClose && typeof onClose === 'function') {
       onClose(reason);
     }
-  }
+  };
   closeToast(reason) {
     clearTimeout(this.closeTimeout);
     Animated.timing(this.state.fadeAnim, {
       toValue: 0,
       duration: 200,
-      useNativeDriver: false
+      useNativeDriver: false,
     }).start(() => {
-      this.closeModal.bind(this, reason);
+      this.closeModal(reason);
       this.state.pan.setValue({ x: 0, y: 0 });
     });
   }
@@ -175,10 +181,10 @@ class ToastContainer extends Component {
       const { x, y } = this.state.pan;
       return (
         <Animated.View
-          {...this._panResponder.panHandlers}
+          {...this.state.swipeDisabled ? {} : this._panResponder.panHandlers}
           style={[
             this.getToastStyle(),
-            { transform: [{ translateX: x }, { translateY: y }] }
+            { transform: [{ translateX: x }, { translateY: y }] },
           ]}
         >
           <Toast
@@ -207,7 +213,7 @@ class ToastContainer extends Component {
 }
 
 ToastContainer.propTypes = {
-  ...ViewPropTypes
+  ...ViewPropTypes,
 };
 
 const StyledToastContainer = connectStyle(
